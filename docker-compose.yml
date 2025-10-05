@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  db:
+    image: mariadb:10.11
+    container_name: task_growmodo_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: task_growmodo
+      MYSQL_USER: usergm
+      MYSQL_PASSWORD: passwdgm
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:latest
+    container_name: task_growmodo
+    depends_on:
+      - db
+    ports:
+      - "8082:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: usergm
+      WORDPRESS_DB_PASSWORD: passwdgm
+      WORDPRESS_DB_NAME: task_growmodo
+    volumes:
+      - ./html:/var/www/html
